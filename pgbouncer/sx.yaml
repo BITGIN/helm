@@ -1,0 +1,39 @@
+image:
+  repository: bitnami/pgbouncer
+  tag: 1.19.0
+
+bitnami:
+  ##  Backend PostgreSQL connection
+  POSTGRESQL_HOST: 34.171.65.97
+  PGBOUNCER_SET_DATABASE_USER: yes
+  PGBOUNCER_SET_DATABASE_PASSWORD: yes
+  ## PgBouncer
+  PGBOUNCER_AUTH_TYPE: plain
+  ## Exposed database
+  PGBOUNCER_DATABASE: postgres
+  ## Options
+  PGBOUNCER_AUTH_USER: "pgbouncer"
+  PGBOUNCER_POOL_MODE: transaction
+  PGBOUNCER_MAX_CLIENT_CONN: 4000
+  PGBOUNCER_STATS_USERS: "pgbouncer"
+
+env:
+#  "DATABASES_HOST": "qc2cyddlk6.ud5awn9glr.tsdb.cloud.timescale.com"
+#  "DATABASES_PORT": "36991"
+#  "DATABASES_DBNAME": "tsdb"
+#  "DATABASES_USER": "tsdbadmin"
+#  "DATABASES_PASSWORD": "rj351377x7y7laer"
+
+#  "DATABASES_CLIENT_SIDE_DBNAME": "postgres"
+  "DATABASES_HOST": "34.171.65.97"
+  "DATABASES_DBNAME": "postgres"
+  "DATABASES_USER": "postgres"
+#  "DATABASES_PASSWORD": "postgresSx"
+
+  "PGBOUNCER_AUTH_USER": "pgbouncer"
+  "PGBOUNCER_AUTH_FILE": "/opt/pgbouncer/config/user_list.txt"
+  "PGBOUNCER_MAX_CLIENT_CONN": "4000"
+  "PGBOUNCER_DEFAULT_POOL_SIZE": "50"
+  "PGBOUNCER_POOL_MODE": "transaction"
+  "PGBOUNCER_AUTH_TYPE": "plain"
+  "PGBOUNCER_ADMIN_USERS": "pgbouncer"
