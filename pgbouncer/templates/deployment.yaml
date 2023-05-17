@@ -21,44 +21,37 @@ spec:
         {{- toYaml . | nindent 8 }}
     {{- end }}
       serviceAccountName: {{ template "pgbouncer.serviceAccountName" . }}
-      volumes:
-        - name: config-volume
-          configMap:
-            name: user-list
-{{/*            items:*/}}
-{{/*              - key: userlist.txt*/}}
-{{/*                path: userlist.txt*/}}
-{{/*                mode: 0777*/}}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           env:
-          {{- range $k, $v := .Values.bitnami }}
+          {{- range $k, $v := .Values.env }}
             - name: {{ $k | quote }}
               value: {{ $v | quote }}
           {{- end }}
+          {{- if and .Values.secret.pgbouncer.name .Values.secret.pgbouncer.key }}
             - name: PGBOUNCER_USERLIST
-              value: '"{{ .Values.bitnami.PGBOUNCER_AUTH_USER }}" "{{ include "getSecret" (dict "Name" "reyield" "Key" "db-password") }}"'
+              value: '"{{ .Values.env.PGBOUNCER_AUTH_USER }}" "{{ include "getSecret" (dict "Name" .Values.secret.pgbouncer.name "Key" .Values.secret.pgbouncer.key) }}"'
+          {{- end }}
+          {{- if and .Values.secret.postgres.name .Values.secret.postgres.key }}
             - name: POSTGRESQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: reyield
-                  key: db-password
+                  name: {{ .Values.secret.postgres.name }}
+                  key: {{ .Values.secret.postgres.key }}
+          {{- end }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: pgbouncer
-              containerPort: {{ .Values.pgbouncer.port }}
+              containerPort: {{ .Values.env.PGBOUNCER_PORT }}
               protocol: TCP
-          volumeMounts:
-            - name: config-volume
-              mountPath: /opt/pgbouncer/conf
           readinessProbe:
             tcpSocket:
-              port: {{ .Values.pgbouncer.port }}
+              port: {{ .Values.env.PGBOUNCER_PORT }}
           lifecycle:
             preStop:
               exec:

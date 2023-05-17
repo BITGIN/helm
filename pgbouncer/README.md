@@ -5,7 +5,7 @@
 ### Add Helm repository
 
 ```bash
-helm repo add belaytzev-pgbouncer https://belaytzev.github.io/pgbouncer-helm
+helm repo add bitgin https://bitgin.github.io/helm
 helm repo update
 ```
 
@@ -14,7 +14,7 @@ helm repo update
 Install the pgbouncer helm chart with a release name `my-release`:
 
 ```bash
-helm install --name my-release belaytzev-pgbouncer/pgbouncer
+helm install --name my-release bitgin/pgbouncer
 ```
 
 ## Uninstallation

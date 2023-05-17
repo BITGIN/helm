@@ -9,7 +9,7 @@ spec:
   ports:
     - name: pgbouncer-headless
       port: {{ .Values.service.port }}
-      targetPort: {{ .Values.pgbouncer.port }}
+      targetPort: {{ .Values.env.PGBOUNCER_PORT }}
       protocol: TCP
   selector:
     app.kubernetes.io/name: {{ include "pgbouncer.name" . }}
