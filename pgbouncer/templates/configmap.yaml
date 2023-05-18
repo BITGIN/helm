@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: userlist-config
+  name: {{ include "pgbouncer.fullname" . }}
 data:
   userlist.txt: |
     {{- if .Values.secret.enabled }}
