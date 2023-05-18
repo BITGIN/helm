@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: userlist-config
+data:
+  userlist.txt: |
+    {{- if .Values.secret.enabled }}
+    "pgbouncer" "{{ include "getSecret" (dict "Name" .Values.secret.pgbouncer.name "Key" .Values.secret.pgbouncer.key) }}"
+    {{- else }}
+    "pgbouncer" "pgbouncer"
+    {{- end }}

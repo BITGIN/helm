@@ -23,6 +23,10 @@ spec:
       serviceAccountName: {{ template "pgbouncer.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: config-volume
+          configMap:
+            name: userlist-config
       containers:
         - name: {{ .Chart.Name }}
           env:
@@ -30,12 +34,9 @@ spec:
             - name: {{ $k | quote }}
               value: {{ $v | quote }}
           {{- end }}
-          {{- if and .Values.secret.pgbouncer.name .Values.secret.pgbouncer.key }}
-            - name: PGBOUNCER_USERLIST
-              value: '"{{ .Values.env.PGBOUNCER_AUTH_USER }}" "{{ include "getSecret" (dict "Name" .Values.secret.pgbouncer.name "Key" .Values.secret.pgbouncer.key) }}"'
-          {{- end }}
-          {{- if and .Values.secret.postgres.name .Values.secret.postgres.key }}
-            - name: POSTGRESQL_PASSWORD
+
+          {{- if .Values.secret.enabled }}
+            - name: DATABASES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.secret.postgres.name }}
@@ -45,13 +46,16 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - name: config-volume
+              mountPath: /opt/pgbouncer/conf
           ports:
             - name: pgbouncer
-              containerPort: {{ .Values.env.PGBOUNCER_PORT }}
+              containerPort: {{ .Values.env.PGBOUNCER_LISTEN_PORT }}
               protocol: TCP
           readinessProbe:
             tcpSocket:
-              port: {{ .Values.env.PGBOUNCER_PORT }}
+              port: {{ .Values.env.PGBOUNCER_LISTEN_PORT }}
           lifecycle:
             preStop:
               exec:
