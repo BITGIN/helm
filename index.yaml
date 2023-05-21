@@ -3,9 +3,9 @@ entries:
   pgbouncer:
   - apiVersion: v1
     appVersion: 1.15.0
-    created: "2023-05-18T20:53:44.033821+08:00"
+    created: "2023-05-21T22:00:20.605441+08:00"
     description: Lightweight connection pooler for PostgreSQL
-    digest: 624a7e5c47974086909f1c04edc22f24e891452af2bbbb1dbf7bf750de260da6
+    digest: e056a1071f88ec478e211ce77ff092b648c72713cddd2bd8167827b4d737ed6c
     home: http://www.pgbouncer.org
     icon: https://raw.githubusercontent.com/belaytzev/pgbouncer-helm/main/pgbouncer.png
     keywords:
@@ -19,4 +19,4 @@ entries:
     urls:
     - https://bitgin.github.io/helm/pgbouncer-1.15.0.tgz
     version: 1.15.0
-generated: "2023-05-18T20:53:44.032492+08:00"
+generated: "2023-05-21T22:00:20.603931+08:00"

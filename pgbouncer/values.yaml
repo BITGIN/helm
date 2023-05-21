@@ -38,20 +38,47 @@ tolerations: []
 
 affinity: {}
 
-## Specify existing secret
-secret:
-  enabled: false
-  pgbouncer:
-    name: ""
-    key: ""
-  postgres:
-    name: ""
-    key: ""
+## Multi backend databases, ignore blow env database setting if you use this
+databases: {}
+#  - pgbName: postgres
+#    dbname: db_name
+#    host: db_host
+#    user: postgres
+#    password: db_password
+#    port: 5432
+#    secret:
+#      name: reyield
+#      key: db-password
+#  - pgbName: tsdb
+#    dbname: db_name_2
+#    host: db_host_2
+#    user: postgres_2
+#    password: db_password_2
+#    port: 5432
+#    secret:
+#      name: reyield-2
+#      key: db-password-2
+
+pgbouncerAuth: {}
+#  - username: ""
+#    password: ""
+#    secret:
+#      name: ""
+#      key: ""
+#  - username: ""
+#    password: ""
+#    secret:
+#      name: ""
+#      key: ""
+
+singleDBSecret: {}
+#  name: ""
+#  key: ""
 
 ## more settings, please refer to https://gitlab.com/aztek-io/oss/containers/pgbouncer-container/-/blob/master/entrypoint.sh
 env:
   ##
-  # Database Settings
+  # Database Settings (single database)
   ##
   #DATABASES_CLIENT_SIDE_DBNAME: ""
   DATABASES_HOST: ""

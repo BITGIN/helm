@@ -64,3 +64,28 @@ Get secret
     {{ index $obj .Key | b64dec }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Generate database list
+*/}}
+{{- define "databaseList" -}}
+{{- $strlist := list }}
+{{- range $v := .Values.databases -}}
+    {{- $dblist := list }}
+    {{- $pgbName := "" }}
+    {{- range $k, $vv := $v }}
+        {{- if eq $k "secret" }}
+            {{- $dblist = printf "%s=%s" "password" (include "getSecret" (dict "Name" $vv.name "Key" $vv.key)) | append $dblist }}
+        {{- else if eq $k "password" }}
+            {{- $dblist = printf "%s=%s" $k $vv | append $dblist }}
+        {{- else if eq $k "pgbName" }}
+            {{- $pgbName = $vv }}
+        {{- else }}
+            {{- $dblist = printf "%s=%s" $k $vv | append $dblist }}
+        {{- end -}}
+    {{- end -}}
+    {{- $dbstr := $dblist | join " " }}
+    {{- $strlist = printf "%s = %s" $pgbName $dbstr | append $strlist}}
+{{- end -}}
+{{ $strlist | join "," }}
+{{- end -}}

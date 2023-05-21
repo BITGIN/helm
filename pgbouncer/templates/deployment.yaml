@@ -30,17 +30,19 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           env:
+            - name: DATABASES
+              value: {{ include "databaseList" . }}
           {{- range $k, $v := .Values.env }}
             - name: {{ $k | quote }}
               value: {{ $v | quote }}
           {{- end }}
 
-          {{- if .Values.secret.enabled }}
+          {{- if .Values.singleDBSecret }}
             - name: DATABASES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.secret.postgres.name }}
-                  key: {{ .Values.secret.postgres.key }}
+                  name: {{ .Values.singleDBSecret.name }}
+                  key: {{ .Values.singleDBSecret.key }}
           {{- end }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}

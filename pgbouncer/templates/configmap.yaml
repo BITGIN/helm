@@ -4,8 +4,14 @@ metadata:
   name: {{ include "pgbouncer.fullname" . }}
 data:
   userlist.txt: |
-    {{- if .Values.secret.enabled }}
-    "pgbouncer" "{{ include "getSecret" (dict "Name" .Values.secret.pgbouncer.name "Key" .Values.secret.pgbouncer.key) }}"
+    {{- if gt (len .Values.pgbouncerAuth) 0 }}
+      {{- range $auth := .Values.pgbouncerAuth }}
+        {{- if $auth.secret }}
+          {{- printf "\n\"%s\"" $auth.username | indent 4 }} "{{ include "getSecret" (dict "Name" $auth.secret.name "Key" $auth.secret.key) }}"
+        {{- else }}
+          {{- printf "\n\"%s\"" $auth.username | indent 4 }} "{{ $auth.password }}"
+        {{- end }}
+      {{- end }}
     {{- else }}
     "pgbouncer" "pgbouncer"
     {{- end }}
